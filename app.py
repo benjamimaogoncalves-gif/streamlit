@@ -10,11 +10,11 @@ st.markdown("""
 }
 
 .card {
-  background: #161B22;
-  padding: 24px;
-  border-radius: 8px;
-  margin-bottom: 16px;
+  background: red;
+  padding: 60px;
+  border-radius: 32px;
 }
+
 </style>
 """, unsafe_allow_html=True)
 

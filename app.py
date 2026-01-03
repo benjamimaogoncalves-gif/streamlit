@@ -1,4 +1,37 @@
 import streamlit as st
 
-st.title("Meu primeiro app Streamlit")
-st.write("Funcionando 🚀")
+st.set_page_config(layout="wide")
+
+st.markdown("""
+<style>
+.container {
+  max-width:1200px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #161B22;
+  padding: 16px;
+  border-radius: 8px;
+  margin-border: 16px;
+}
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown('<div_class = "container">, unsafe_allow_html=True')
+
+st.title("Dashboard Base")
+
+col1, col2 = st.columns(2)
+
+with col1:
+  st.markdown('<div class = "card">', unsafe_allow_html=True)
+  st.metric("Indicador A", "42")
+  st.markdown('</div>', unsafe_allow_html=True)
+
+with col2:
+  st.markdown('<div class = "card">', unsafe_allow_html=True)
+  st.metric("Indicador B", "17")
+  st.markdown('</div>', unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)

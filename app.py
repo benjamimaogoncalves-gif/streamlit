@@ -13,12 +13,12 @@ st.markdown("""
   background: #161B22;
   padding: 24px;
   border-radius: 8px;
-  margin-border: 16px;
+  margin-bottom: 16px;
 }
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div_class = "container">, unsafe_allow_html=True')
+st.markdown('<div class="container">', unsafe_allow_html=True)
 
 st.title("Dashboard Base")
 

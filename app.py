@@ -169,9 +169,9 @@ st.title("Calculadora de Rentabilidade")
 
 num_colunas = 3  # controle do grid
 
-for i in range(0, len(indicadores), NUM_COLUNAS):
-    linha = indicadores[i:i + NUM_COLUNAS]
-    cols = st.columns(NUM_COLUNAS)
+for i in range(0, len(indicadores), num_colunas):
+    linha = indicadores[i:i + num_colunas]
+    cols = st.columns(num_colunas)
 
     for col, indicador in zip(cols, linha):
         with col:

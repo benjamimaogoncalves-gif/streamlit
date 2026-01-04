@@ -1,6 +1,4 @@
 import streamlit as st
-import pandas as pd
-import altair as alt
 
 # =========================================================
 # 0. DESIGN TOKENS
@@ -24,6 +22,9 @@ st.set_page_config(layout="wide")
 # =========================================================
 
 def load_indicadores():
+    """
+    Fonte de dados dos indicadores.
+    """
     return [
         {"id": "A", "titulo": "Indicador A", "valor": 42, "delta": "+3 mês anterior", "variant": "default"},
         {"id": "B", "titulo": "Indicador B", "valor": 17, "delta": "estável", "variant": "default"},
@@ -38,7 +39,6 @@ def load_indicadores():
             "delta": "atenção: valor abaixo da projeção",
             "variant": "dark",
             "span": "full",
-            "series": [12, 18, 15, 22, 19, 25, 23],
         },
     ]
 
@@ -47,6 +47,10 @@ def load_indicadores():
 # =========================================================
 
 def get_indicadores():
+    """
+    Camada intermediária.
+    Aqui entram regras de negócio no futuro.
+    """
     return load_indicadores()
 
 # =========================================================
@@ -122,7 +126,7 @@ p {{
 """, unsafe_allow_html=True)
 
 # =========================================================
-# 5. COMPONENTES
+# 5. COMPONENTE
 # =========================================================
 
 def kpi_card(indicador):
@@ -138,63 +142,8 @@ def kpi_card(indicador):
     </div>
     """
 
-def line_chart_black(series):
-    df = pd.DataFrame({
-        "x": list(range(len(series))),
-        "y": series
-    })
-
-    base = alt.Chart(df).encode(
-        x=alt.X(
-            "x:O",
-            title=None,
-            axis=alt.Axis(
-                labelColor=color_black,
-                tickColor=color_black,
-                labelAngle=0,
-                labelFontSize=24      # ⬆️ dobro do tamanho
-            )
-        ),
-        y=alt.Y(
-            "y:Q",
-            title=None,
-            axis=alt.Axis(
-                labels=False,
-                ticks=False
-            )
-        )
-    )
-
-    line = base.mark_line(
-        color=color_black,
-        strokeWidth=2
-    )
-
-    points = base.mark_point(
-        color=color_black,     # ⚫ círculos pretos
-        filled=True,
-        size=80
-    )
-
-    labels = base.mark_text(
-        dy=-24,                # ⬆️ mais afastados da linha
-        color=color_black,
-        fontSize=24            # ⬆️ dobro do tamanho
-    ).encode(
-        text="y:Q"
-    )
-
-    return (line + points + labels).properties(
-        height=180,
-        background=color_white
-    ).configure_view(
-        strokeWidth=0
-    ).configure_axis(
-        grid=False
-    )
-
 # =========================================================
-# 6. LAYOUT – GRID DINÂMICO
+# 6. LAYOUT – GRID DINÂMICO (COM SPAN)
 # =========================================================
 
 indicadores = get_indicadores()
@@ -208,30 +157,11 @@ for i in range(0, len(indicadores), num_colunas):
 
     # Caso full-width (Indicador G)
     if len(linha) == 1 and linha[0].get("span") == "full":
-        indicador = linha[0]
         col = st.columns(1)[0]
-
         with col:
-            st.markdown(
-                f"""
-                <div class="card card-dark">
-                  <h2>{indicador["titulo"]}</h2>
-                  <div class="kpi-value">{indicador["valor"]}</div>
-                  <p>{indicador["delta"]}</p>
-                """,
-                unsafe_allow_html=True
-            )
-
-            st.altair_chart(
-                line_chart_black(indicador["series"]),
-                use_container_width=True
-            )
-
-            st.markdown("</div>", unsafe_allow_html=True)
-
+            st.markdown(kpi_card(linha[0]), unsafe_allow_html=True)
         continue
 
-    # Grid normal
     cols = st.columns(num_colunas)
     for col, indicador in zip(cols, linha):
         with col:

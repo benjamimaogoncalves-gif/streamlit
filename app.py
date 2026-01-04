@@ -58,7 +58,7 @@ st.markdown("""
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px;
-  background: var(--bg-page);
+  /* background removido */
 }
 
 /* =========================================================
@@ -144,7 +144,7 @@ strong {
 
 st.markdown('<div class="container">', unsafe_allow_html=True)
 
-st.title("Dashboard Base")
+st.title("Calculadora Rentabilidade")
 
 col1, col2 = st.columns(2)
 

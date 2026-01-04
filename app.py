@@ -3,6 +3,18 @@ import pandas as pd
 import altair as alt
 
 # =========================================================
+# 0. DESIGN TOKENS (PYTHON)
+# Fonte única de verdade para cores críticas
+# =========================================================
+
+color_black = "#000000"
+color_white = "#ffffff"
+color_accent = "#ff6200"
+
+gray_300 = "#bdbdbd"
+gray_500 = "#757575"
+
+# =========================================================
 # 1. CONFIGURAÇÃO DO LAYOUT
 # =========================================================
 
@@ -39,83 +51,75 @@ def get_indicadores():
     return load_indicadores()
 
 # =========================================================
-# 4. STYLE – DESIGN SYSTEM
+# 4. STYLE – DESIGN SYSTEM (CSS)
 # =========================================================
 
-st.markdown("""
+st.markdown(f"""
 <style>
-:root {
-  --color-primary: #FF6200;
-  --color-black: #000000;
-  --color-white: #FFFFFF;
+:root {{
+  --color-black: {color_black};
+  --color-white: {color_white};
+  --accent: {color_accent};
 
-  --gray-300: #BDBDBD;
-  --gray-500: #757575;
+  --gray-300: {gray_300};
+  --gray-500: {gray_500};
+}}
 
-  --text-secondary: var(--gray-500);
+body {{
+  background: var(--color-black);
+}}
 
-  --bg-page: var(--color-black);
-  --bg-card: var(--color-white);
-
-  --accent: var(--color-primary);
-  --accent-on-dark: var(--color-white);
-}
-
-body {
-  background: var(--bg-page);
-}
-
-.container {
+.container {{
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px;
-}
+}}
 
-.card {
-  background: var(--bg-card);
+.card {{
+  background: var(--color-white);
   padding: 40px;
   border-radius: 20px;
   border: 1px solid var(--gray-300);
   margin-bottom: 16px;
-}
+}}
 
-.card-dark {
+.card-dark {{
   background: var(--color-black);
   border-color: var(--color-black);
-}
+}}
 
 .card-dark h2,
-.card-dark p {
+.card-dark p {{
   color: var(--color-white);
-}
+}}
 
-h1 {
+h1 {{
   font-size: 32px;
   margin-bottom: 80px;
-}
+}}
 
-h2 {
+h2 {{
   font-size: 20px;
   font-weight: 400;
   letter-spacing: 0.02em;
   margin-bottom: 8px;
-}
+}}
 
-p {
+p {{
   font-size: 14px;
   line-height: 1.5;
-  color: var(--text-secondary);
-}
+  color: var(--gray-500);
+}}
 
-.kpi-value {
+.kpi-value {{
   font-size: 50px;
   font-weight: 700;
   color: var(--accent);
-}
+}}
 
-.card-dark .kpi-value {
-  color: var(--accent-on-dark);
-}
+.card-dark .kpi-value {{
+  color: var(--color-white);
+}}
 </style>
 """, unsafe_allow_html=True)
 
@@ -143,23 +147,47 @@ def line_chart_white(series):
     })
 
     base = alt.Chart(df).encode(
-        x=alt.X("x:O", title=None, axis=alt.Axis(labelColor="white")),
-        y=alt.Y("y:Q", title=None, axis=alt.Axis(labelColor="white"))
+        x=alt.X(
+            "x:O",
+            title=None,
+            axis=alt.Axis(labelColor=color_white, tickColor=color_white)
+        ),
+        y=alt.Y(
+            "y:Q",
+            title=None,
+            axis=alt.Axis(labelColor=color_white, tickColor=color_white)
+        )
     )
 
-    line = base.mark_line(color="white", strokeWidth=2)
-    points = base.mark_point(color="white", filled=True, size=60)
-    labels = base.mark_text(dy=-10, color="white", fontSize=12).encode(text="y:Q")
+    line = base.mark_line(
+        color=color_white,
+        strokeWidth=2
+    )
 
-    return (line + points + labels).properties(
+    points = base.mark_point(
+        color=color_white,
+        filled=True,
+        size=60
+    )
+
+    labels = base.mark_text(
+        dy=-10,
+        color=color_white,
+        fontSize=12
+    ).encode(
+        text="y:Q"
+    )
+
+    chart = (line + points + labels).properties(
         height=180,
-        background="transparent"
+        background=color_black
     ).configure_view(
         strokeWidth=0
     ).configure_axis(
-        grid=False,
-        tickColor="white"
+        grid=False
     )
+
+    return chart
 
 # =========================================================
 # 6. LAYOUT – GRID DINÂMICO
@@ -191,7 +219,7 @@ for i in range(0, len(indicadores), num_colunas):
                 unsafe_allow_html=True
             )
 
-            # gráfico dentro do card
+            # gráfico (autossuficiente)
             st.altair_chart(
                 line_chart_white(indicador["series"]),
                 use_container_width=True

@@ -67,7 +67,7 @@ st.markdown("""
 .card {
   background: var(--bg-card);
   padding: 24px;
-  border-radius: 0px;
+  border-radius: 5px;
   margin-bottom: 16px;
   border: 1px solid var(--gray-300);
 }
@@ -100,8 +100,10 @@ strong {
 }
 
 /* Tipografia local */
+
 .card h2 {
-  font-weight: 400;   /* normal / light visual */
+  font-weight: 400;
+  letter-spacing: 0.02em;
 }
 
 .card p {

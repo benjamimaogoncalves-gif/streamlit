@@ -13,16 +13,15 @@ st.set_page_config(layout="wide")
 def load_indicadores():
     """
     Fonte de dados dos indicadores.
-    Hoje: lista mockada
-    Futuro: query SQL, API, dataframe, etc.
     """
     return [
         {"id": "A", "titulo": "Indicador A", "valor": 42, "delta": "+3 mês anterior", "variant": "default"},
-        {"id": "B", "titulo": "Indicador B", "valor": 17, "delta": "estável",           "variant": "default"},
-        {"id": "C", "titulo": "Indicador C", "valor": 9,  "delta": "-1 mês anterior",    "variant": "default"},
-        {"id": "D", "titulo": "Indicador D", "valor": 63, "delta": "+5 mês anterior",    "variant": "dark"},
-        {"id": "E", "titulo": "Indicador E", "valor": 28, "delta": "+1 mês anterior",    "variant": "default"},
-        {"id": "F", "titulo": "Indicador F", "valor": 51, "delta": "estável",            "variant": "default"},
+        {"id": "B", "titulo": "Indicador B", "valor": 17, "delta": "estável", "variant": "default"},
+        {"id": "C", "titulo": "Indicador C", "valor": 9,  "delta": "-1 mês anterior", "variant": "default"},
+        {"id": "D", "titulo": "Indicador D", "valor": 63, "delta": "+5 mês anterior", "variant": "dark"},
+        {"id": "E", "titulo": "Indicador E", "valor": 28, "delta": "+1 mês anterior", "variant": "default"},
+        {"id": "F", "titulo": "Indicador F", "valor": 51, "delta": "estável", "variant": "default"},
+        {"id": "G", "titulo": "Indicador G", "valor": "Total", "delta": "atenção: valor abaixo da projeção", "variant": "dark"},
     ]
 
 # =========================================================
@@ -191,5 +190,11 @@ with col5:
 
 with col6:
     st.markdown(kpi_card(indicadores[5]), unsafe_allow_html=True)
+
+# ===== LINHA 2: G =====
+col7 = st.columns(1)
+
+with col4:
+    st.markdown(kpi_card(indicadores[6]), unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)

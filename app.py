@@ -13,9 +13,6 @@ st.set_page_config(layout="wide")
 # =========================================================
 
 def load_indicadores():
-    """
-    Fonte de dados dos indicadores.
-    """
     return [
         {"id": "A", "titulo": "Indicador A", "valor": 42, "delta": "+3 mês anterior", "variant": "default"},
         {"id": "B", "titulo": "Indicador B", "valor": 17, "delta": "estável", "variant": "default"},
@@ -23,93 +20,39 @@ def load_indicadores():
         {"id": "D", "titulo": "Indicador D", "valor": 63, "delta": "+5 mês anterior", "variant": "dark"},
         {"id": "E", "titulo": "Indicador E", "valor": 28, "delta": "+1 mês anterior", "variant": "default"},
         {"id": "F", "titulo": "Indicador F", "valor": 51, "delta": "estável", "variant": "default"},
-        {"id": "G",
-         "titulo": "Indicador G",
-         "valor": "Total",
-         "delta": "atenção: valor abaixo da projeção",
-         "variant": "dark",
-         "span": "full",
-         "series": [12, 18, 15, 22, 19, 25, 23]}
+        {
+            "id": "G",
+            "titulo": "Indicador G",
+            "valor": "Total",
+            "delta": "atenção: valor abaixo da projeção",
+            "variant": "dark",
+            "span": "full",
+            "series": [12, 18, 15, 22, 19, 25, 23],
+        },
     ]
-    
-def line_chart_white(series):
-    df = pd.DataFrame({
-        "x": list(range(len(series))),
-        "y": series
-    })
 
-    base = alt.Chart(df).encode(
-        x=alt.X("x:O", title=None),
-        y=alt.Y("y:Q", title=None)
-    )
-
-    line = base.mark_line(
-        color="white",
-        strokeWidth=2
-    )
-
-    points = base.mark_point(
-        color="white",
-        filled=True,
-        size=60
-    )
-
-    labels = base.mark_text(
-        dy=-10,
-        color="white",
-        fontSize=12
-    ).encode(
-        text="y:Q"
-    )
-
-    chart = (line + points + labels).properties(
-        height=180
-    ).configure_axis(
-        grid=False,
-        labelColor="white",
-        tickColor="white"
-    ).configure_view(
-        strokeWidth=0
-    )
-
-    return chart
 # =========================================================
 # 3. DATAPREP
 # =========================================================
 
 def get_indicadores():
-    """
-    Camada intermediária: regras de negócio, cálculos, filtros etc.
-    """
     return load_indicadores()
 
 # =========================================================
-# 4. STYLE - DESIGN SYSTEM
+# 4. STYLE – DESIGN SYSTEM
 # =========================================================
 
 st.markdown("""
 <style>
-
-/* =======================
-   SISTEMA DE CORES
-   ======================= */
 :root {
   --color-primary: #FF6200;
-  --color-primary-soft: #F28500;
-  --color-brand-dark: #020F3C;
-
   --color-black: #000000;
   --color-white: #FFFFFF;
 
-  --gray-100: #EEEEEE;
   --gray-300: #BDBDBD;
   --gray-500: #757575;
-  --gray-700: #424242;
-  --gray-900: #212121;
 
-  --text-primary: var(--color-black);
   --text-secondary: var(--gray-500);
-  --text-inverse: var(--color-white);
 
   --bg-page: var(--color-black);
   --bg-card: var(--color-white);
@@ -118,9 +61,6 @@ st.markdown("""
   --accent-on-dark: var(--color-white);
 }
 
-/* =======================
-   BASE DA PÁGINA
-   ======================= */
 body {
   background: var(--bg-page);
 }
@@ -131,9 +71,6 @@ body {
   padding: 40px;
 }
 
-/* =======================
-   CARDS - CAIXAS
-   ======================= */
 .card {
   background: var(--bg-card);
   padding: 40px;
@@ -149,12 +86,9 @@ body {
 
 .card-dark h2,
 .card-dark p {
-  color: var(--text-inverse);
+  color: var(--color-white);
 }
 
-/* =======================
-   TIPOGRAFIA
-   ======================= */
 h1 {
   font-size: 32px;
   margin-bottom: 80px;
@@ -182,18 +116,14 @@ p {
 .card-dark .kpi-value {
   color: var(--accent-on-dark);
 }
-
 </style>
 """, unsafe_allow_html=True)
 
 # =========================================================
-# 5. COMPONENTE VISUAL
+# 5. COMPONENTES
 # =========================================================
 
 def kpi_card(indicador):
-    """
-    Renderiza um card de KPI a partir de um dicionário de dados.
-    """
     classes = "card"
     if indicador["variant"] == "dark":
         classes += " card-dark"
@@ -205,36 +135,71 @@ def kpi_card(indicador):
       <p>{indicador["delta"]}</p>
     </div>
     """
-    
+
+def line_chart_white(series):
+    df = pd.DataFrame({
+        "x": list(range(len(series))),
+        "y": series
+    })
+
+    base = alt.Chart(df).encode(
+        x=alt.X("x:O", title=None, axis=alt.Axis(labelColor="white")),
+        y=alt.Y("y:Q", title=None, axis=alt.Axis(labelColor="white"))
+    )
+
+    line = base.mark_line(color="white", strokeWidth=2)
+    points = base.mark_point(color="white", filled=True, size=60)
+    labels = base.mark_text(dy=-10, color="white", fontSize=12).encode(text="y:Q")
+
+    return (line + points + labels).properties(
+        height=180,
+        background="transparent"
+    ).configure_view(
+        strokeWidth=0
+    ).configure_axis(
+        grid=False,
+        tickColor="white"
+    )
+
 # =========================================================
-# 6. LAYOUT - GRID DINÂMICO
+# 6. LAYOUT – GRID DINÂMICO
 # =========================================================
 
 indicadores = get_indicadores()
+num_colunas = 3
 
 st.markdown('<div class="container">', unsafe_allow_html=True)
-
 st.title("Calculadora de Rentabilidade")
-
-num_colunas = 3
 
 for i in range(0, len(indicadores), num_colunas):
     linha = indicadores[i:i + num_colunas]
 
-    # Caso: card full-width
+    # Caso full-width (Indicador G)
     if len(linha) == 1 and linha[0].get("span") == "full":
-        col = st.columns(1)[0]
         indicador = linha[0]
+        col = st.columns(1)[0]
 
         with col:
-            # Card
-            st.markdown(kpi_card(indicador), unsafe_allow_html=True)
+            # abre card
+            st.markdown(
+                f"""
+                <div class="card card-dark">
+                  <h2>{indicador["titulo"]}</h2>
+                  <div class="kpi-value">{indicador["valor"]}</div>
+                  <p>{indicador["delta"]}</p>
+                """,
+                unsafe_allow_html=True
+            )
 
-            # Gráfico dentro do card
+            # gráfico dentro do card
             st.altair_chart(
                 line_chart_white(indicador["series"]),
                 use_container_width=True
             )
+
+            # fecha card
+            st.markdown("</div>", unsafe_allow_html=True)
+
         continue
 
     # Grid normal

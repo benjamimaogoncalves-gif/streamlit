@@ -24,9 +24,6 @@ st.set_page_config(layout="wide")
 # =========================================================
 
 def load_indicadores():
-    """
-    Fonte de dados dos indicadores.
-    """
     return [
         {"id": "A", "titulo": "Indicador A", "valor": 42, "delta": "+3 mês anterior", "variant": "default"},
         {"id": "B", "titulo": "Indicador B", "valor": 17, "delta": "estável", "variant": "default"},
@@ -154,7 +151,8 @@ def line_chart_black(series):
             axis=alt.Axis(
                 labelColor=color_black,
                 tickColor=color_black,
-                labelAngle=0
+                labelAngle=0,
+                labelFontSize=24      # ⬆️ dobro do tamanho
             )
         ),
         y=alt.Y(
@@ -167,16 +165,27 @@ def line_chart_black(series):
         )
     )
 
-    line = base.mark_line(color=color_black, strokeWidth=2)
-    points = base.mark_point(color=color_black, filled=True, size=60)
-    labels = base.mark_text(
-        dy=-10,
+    line = base.mark_line(
         color=color_black,
-        fontSize=12
-    ).encode(text="y:Q")
+        strokeWidth=2
+    )
+
+    points = base.mark_point(
+        color=color_black,     # ⚫ círculos pretos
+        filled=True,
+        size=80
+    )
+
+    labels = base.mark_text(
+        dy=-24,                # ⬆️ mais afastados da linha
+        color=color_black,
+        fontSize=24            # ⬆️ dobro do tamanho
+    ).encode(
+        text="y:Q"
+    )
 
     return (line + points + labels).properties(
-        height=160,
+        height=180,
         background=color_white
     ).configure_view(
         strokeWidth=0

@@ -56,7 +56,7 @@ st.markdown("""
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 40px;
   background: var(--bg-page);
 }
 
@@ -66,10 +66,24 @@ st.markdown("""
 
 .card {
   background: var(--bg-card);
-  padding: 24px;
+  padding: 40px;
   border-radius: 5px;
   margin-bottom: 16px;
   border: 1px solid var(--gray-300);
+}
+
+.card-dark {
+  background: var(--gray-900);
+  border: 1px solid var(--gray-700);
+}
+
+.card-dark h2,
+.card-dark p {
+  color: var(--text-inverse);
+}
+
+.card-dark .kpi-value {
+  color: var(--accent);
 }
 
 /* =========================================================
@@ -148,6 +162,26 @@ with col2:
       <h2>Indicador B</h2>
       <div class="kpi-value">17</div>
       <p>estável</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+col3, col4 = st.columns(2)
+
+with col3:
+    st.markdown("""
+    <div class="card">
+      <h2>Indicador C</h2>
+      <div class="kpi-value">9</div>
+      <p>-1 mês anterior</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col4:
+    st.markdown("""
+    <div class="card card-dark">
+      <h2>Indicador D</h2>
+      <div class="kpi-value">63</div>
+      <p>+5 mês anterior</p>
     </div>
     """, unsafe_allow_html=True)
 

@@ -1,13 +1,14 @@
 import streamlit as st
 
 # =========================================================
-# 1. CONFIGURAÇÃO DO LAYOUT
+# 1. CONFIGURAÇÃO
 # =========================================================
 
 st.set_page_config(layout="wide")
 
 # =========================================================
-# 2. FONTE DE DADOS
+# 2. FONTE DE DADOS (MOCK ATUAL)
+#    🔁 Futuro: banco, API, dataframe
 # =========================================================
 
 def load_indicadores():
@@ -21,24 +22,23 @@ def load_indicadores():
         {"id": "B", "titulo": "Indicador B", "valor": 17, "delta": "estável",           "variant": "default"},
         {"id": "C", "titulo": "Indicador C", "valor": 9,  "delta": "-1 mês anterior",    "variant": "default"},
         {"id": "D", "titulo": "Indicador D", "valor": 63, "delta": "+5 mês anterior",    "variant": "dark"},
+        {"id": "E", "titulo": "Indicador E", "valor": 28, "delta": "+1 mês anterior",    "variant": "default"},
+        {"id": "F", "titulo": "Indicador F", "valor": 51, "delta": "estável",            "variant": "default"},
     ]
 
 # =========================================================
-# 3. DATAPREP
+# 3. CAMADA DE ACESSO / PREPARAÇÃO
 # =========================================================
 
 def get_indicadores():
     """
-    Camada intermediária:
-    - cálculos
-    - regras de negócio
-    - transformação de dados
+    Camada intermediária.
+    Aqui entram regras de negócio, cálculos, filtros etc.
     """
-    indicadores = load_indicadores()
-    return indicadores
+    return load_indicadores()
 
 # =========================================================
-# 4. STYLE - DESIGN SYSTEM
+# 4. STYLE / DESIGN SYSTEM
 # =========================================================
 
 st.markdown("""
@@ -141,13 +141,12 @@ p {
 """, unsafe_allow_html=True)
 
 # =========================================================
-# 5. COMPONENTES VISUAIS
+# 5. COMPONENTE VISUAL
 # =========================================================
 
 def kpi_card(indicador):
     """
-    Componente visual.
-    Recebe um dicionário de dados e renderiza o card.
+    Renderiza um card de KPI a partir de um dicionário de dados.
     """
     classes = "card"
     if indicador["variant"] == "dark":
@@ -171,8 +170,8 @@ st.markdown('<div class="container">', unsafe_allow_html=True)
 
 st.title("Calculadora de Rentabilidade")
 
-# Linha 1
-col1, col2 = st.columns(2)
+# ===== LINHA 1: A B C =====
+col1, col2, col3 = st.columns(3)
 
 with col1:
     st.markdown(kpi_card(indicadores[0]), unsafe_allow_html=True)
@@ -180,13 +179,19 @@ with col1:
 with col2:
     st.markdown(kpi_card(indicadores[1]), unsafe_allow_html=True)
 
-# Linha 2
-col3, col4 = st.columns(2)
-
 with col3:
     st.markdown(kpi_card(indicadores[2]), unsafe_allow_html=True)
 
+# ===== LINHA 2: D E F =====
+col4, col5, col6 = st.columns(3)
+
 with col4:
     st.markdown(kpi_card(indicadores[3]), unsafe_allow_html=True)
+
+with col5:
+    st.markdown(kpi_card(indicadores[4]), unsafe_allow_html=True)
+
+with col6:
+    st.markdown(kpi_card(indicadores[5]), unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)

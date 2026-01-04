@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import altair as alt
 
 # =========================================================
 # 1. CONFIGURAÇÃO DO LAYOUT
@@ -27,9 +28,51 @@ def load_indicadores():
          "valor": "Total",
          "delta": "atenção: valor abaixo da projeção",
          "variant": "dark",
+         "span": "full",
          "series": [12, 18, 15, 22, 19, 25, 23]}
     ]
+    
+def line_chart_white(series):
+    df = pd.DataFrame({
+        "x": list(range(len(series))),
+        "y": series
+    })
 
+    base = alt.Chart(df).encode(
+        x=alt.X("x:O", title=None),
+        y=alt.Y("y:Q", title=None)
+    )
+
+    line = base.mark_line(
+        color="white",
+        strokeWidth=2
+    )
+
+    points = base.mark_point(
+        color="white",
+        filled=True,
+        size=60
+    )
+
+    labels = base.mark_text(
+        dy=-10,
+        color="white",
+        fontSize=12
+    ).encode(
+        text="y:Q"
+    )
+
+    chart = (line + points + labels).properties(
+        height=180
+    ).configure_axis(
+        grid=False,
+        labelColor="white",
+        tickColor="white"
+    ).configure_view(
+        strokeWidth=0
+    )
+
+    return chart
 # =========================================================
 # 3. DATAPREP
 # =========================================================
@@ -173,23 +216,31 @@ st.markdown('<div class="container">', unsafe_allow_html=True)
 
 st.title("Calculadora de Rentabilidade")
 
-num_colunas = 3  # controle do grid
+num_colunas = 3
 
 for i in range(0, len(indicadores), num_colunas):
     linha = indicadores[i:i + num_colunas]
-    cols = st.columns(num_colunas)
 
-    for col, indicador in zip(cols, linha):
+    # Caso: card full-width
+    if len(linha) == 1 and linha[0].get("span") == "full":
+        col = st.columns(1)[0]
+        indicador = linha[0]
+
         with col:
-            # Card textual
+            # Card
             st.markdown(kpi_card(indicador), unsafe_allow_html=True)
 
-            # Caso especial: indicador com série -> gráfico
-            if "series" in indicador:
-                df = pd.DataFrame({
-                    "valor": indicador["series"]
-                })
+            # Gráfico dentro do card
+            st.altair_chart(
+                line_chart_white(indicador["series"]),
+                use_container_width=True
+            )
+        continue
 
-                st.line_chart(df, height=180)
+    # Grid normal
+    cols = st.columns(num_colunas)
+    for col, indicador in zip(cols, linha):
+        with col:
+            st.markdown(kpi_card(indicador), unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)

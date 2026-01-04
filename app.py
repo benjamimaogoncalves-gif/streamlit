@@ -36,7 +36,7 @@ st.markdown("""
   --gray-900: #212121;
 
   /* Texto */
-  --text-primary: var(--gray-900);
+  --text-primary: var(--color-black);
   --text-secondary: var(--gray-500);
   --text-inverse: var(--color-white);
 
@@ -46,6 +46,7 @@ st.markdown("""
 
   /* Destaques */
   --accent: var(--color-primary);
+  --accent-dark: var(--color-white);
   --accent-soft: var(--color-primary-soft);
 }
 
@@ -67,14 +68,14 @@ st.markdown("""
 .card {
   background: var(--bg-card);
   padding: 40px;
-  border-radius: 5px;
+  border-radius: 30px;
   margin-bottom: 16px;
   border: 1px solid var(--gray-300);
 }
 
 .card-dark {
-  background: var(--gray-900);
-  border: 1px solid var(--gray-700);
+  background: var(--color-black);
+  border: 1px solid var(--color-black);
 }
 
 .card-dark h2,
@@ -83,7 +84,7 @@ st.markdown("""
 }
 
 .card-dark .kpi-value {
-  color: var(--accent);
+  color: var(--accent-dark);
 }
 
 /* =========================================================

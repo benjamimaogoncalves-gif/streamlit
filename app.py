@@ -68,7 +68,7 @@ st.markdown("""
 .card {
   background: var(--bg-card);
   padding: 40px;
-  border-radius: 30px;
+  border-radius: 20px;
   margin-bottom: 16px;
   border: 1px solid var(--gray-300);
 }

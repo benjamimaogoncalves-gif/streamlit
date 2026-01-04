@@ -1,14 +1,13 @@
 import streamlit as st
 
 # =========================================================
-# 1. CONFIGURAÇÃO
+# 1. CONFIGURAÇÃO DO LAYOUT
 # =========================================================
 
 st.set_page_config(layout="wide")
 
 # =========================================================
-# 2. FONTE DE DADOS (MOCK ATUAL)
-#    🔁 Futuro: banco, API, dataframe
+# 2. FONTE DE DADOS
 # =========================================================
 
 def load_indicadores():
@@ -27,18 +26,17 @@ def load_indicadores():
     ]
 
 # =========================================================
-# 3. CAMADA DE ACESSO / PREPARAÇÃO
+# 3. DATAPREP
 # =========================================================
 
 def get_indicadores():
     """
-    Camada intermediária.
-    Aqui entram regras de negócio, cálculos, filtros etc.
+    Camada intermediária: regras de negócio, cálculos, filtros etc.
     """
     return load_indicadores()
 
 # =========================================================
-# 4. STYLE / DESIGN SYSTEM
+# 4. STYLE - DESIGN SYSTEM
 # =========================================================
 
 st.markdown("""
@@ -86,7 +84,7 @@ body {
 }
 
 /* =======================
-   CARDS
+   CARDS - CAIXAS
    ======================= */
 .card {
   background: var(--bg-card);

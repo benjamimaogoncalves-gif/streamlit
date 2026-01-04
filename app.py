@@ -3,8 +3,7 @@ import pandas as pd
 import altair as alt
 
 # =========================================================
-# 0. DESIGN TOKENS (PYTHON)
-# Fonte única de verdade para cores críticas
+# 0. DESIGN TOKENS (fonte única de verdade)
 # =========================================================
 
 color_black = "#000000"
@@ -25,6 +24,9 @@ st.set_page_config(layout="wide")
 # =========================================================
 
 def load_indicadores():
+    """
+    Fonte de dados dos indicadores.
+    """
     return [
         {"id": "A", "titulo": "Indicador A", "valor": 42, "delta": "+3 mês anterior", "variant": "default"},
         {"id": "B", "titulo": "Indicador B", "valor": 17, "delta": "estável", "variant": "default"},
@@ -48,10 +50,14 @@ def load_indicadores():
 # =========================================================
 
 def get_indicadores():
+    """
+    Camada intermediária.
+    Aqui entram regras de negócio no futuro.
+    """
     return load_indicadores()
 
 # =========================================================
-# 4. STYLE – DESIGN SYSTEM (CSS)
+# 4. STYLE – DESIGN SYSTEM
 # =========================================================
 
 st.markdown(f"""
@@ -91,6 +97,14 @@ body {{
 .card-dark h2,
 .card-dark p {{
   color: var(--color-white);
+}}
+
+.chart-wrapper {{
+  background: var(--color-black);
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 16px;
+  border: 1px solid var(--gray-300);
 }}
 
 h1 {{
@@ -150,44 +164,34 @@ def line_chart_white(series):
         x=alt.X(
             "x:O",
             title=None,
-            axis=alt.Axis(labelColor=color_white, tickColor=color_white)
+            axis=alt.Axis(
+                labelColor=color_white,
+                tickColor=color_white,
+                labelAngle=0
+            )
         ),
         y=alt.Y(
             "y:Q",
             title=None,
-            axis=alt.Axis(labelColor=color_white, tickColor=color_white)
+            axis=alt.Axis(
+                labelColor=color_white,
+                tickColor=color_white
+            )
         )
     )
 
-    line = base.mark_line(
-        color=color_white,
-        strokeWidth=2
-    )
+    line = base.mark_line(color=color_white, strokeWidth=2)
+    points = base.mark_point(color=color_white, filled=True, size=60)
+    labels = base.mark_text(dy=-10, color=color_white, fontSize=12).encode(text="y:Q")
 
-    points = base.mark_point(
-        color=color_white,
-        filled=True,
-        size=60
-    )
-
-    labels = base.mark_text(
-        dy=-10,
-        color=color_white,
-        fontSize=12
-    ).encode(
-        text="y:Q"
-    )
-
-    chart = (line + points + labels).properties(
-        height=180,
+    return (line + points + labels).properties(
+        height=160,
         background=color_black
     ).configure_view(
         strokeWidth=0
     ).configure_axis(
         grid=False
     )
-
-    return chart
 
 # =========================================================
 # 6. LAYOUT – GRID DINÂMICO
@@ -219,11 +223,13 @@ for i in range(0, len(indicadores), num_colunas):
                 unsafe_allow_html=True
             )
 
-            # gráfico (autossuficiente)
+            # gráfico com fundo arredondado e margem
+            st.markdown('<div class="chart-wrapper">', unsafe_allow_html=True)
             st.altair_chart(
                 line_chart_white(indicador["series"]),
                 use_container_width=True
             )
+            st.markdown('</div>', unsafe_allow_html=True)
 
             # fecha card
             st.markdown("</div>", unsafe_allow_html=True)

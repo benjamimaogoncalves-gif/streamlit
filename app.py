@@ -156,9 +156,9 @@ def kpi_card(indicador):
       <p>{indicador["delta"]}</p>
     </div>
     """
-
+    
 # =========================================================
-# 6. LAYOUT
+# 6. LAYOUT - GRID DINÂMICO
 # =========================================================
 
 indicadores = get_indicadores()
@@ -167,34 +167,14 @@ st.markdown('<div class="container">', unsafe_allow_html=True)
 
 st.title("Calculadora de Rentabilidade")
 
-# ===== LINHA 1: A B C =====
-col1, col2, col3 = st.columns(3)
+num_colunas = 3  # controle do grid
 
-with col1:
-    st.markdown(kpi_card(indicadores[0]), unsafe_allow_html=True)
+for i in range(0, len(indicadores), NUM_COLUNAS):
+    linha = indicadores[i:i + NUM_COLUNAS]
+    cols = st.columns(NUM_COLUNAS)
 
-with col2:
-    st.markdown(kpi_card(indicadores[1]), unsafe_allow_html=True)
-
-with col3:
-    st.markdown(kpi_card(indicadores[2]), unsafe_allow_html=True)
-
-# ===== LINHA 2: D E F =====
-col4, col5, col6 = st.columns(3)
-
-with col4:
-    st.markdown(kpi_card(indicadores[3]), unsafe_allow_html=True)
-
-with col5:
-    st.markdown(kpi_card(indicadores[4]), unsafe_allow_html=True)
-
-with col6:
-    st.markdown(kpi_card(indicadores[5]), unsafe_allow_html=True)
-
-# ===== LINHA 2: G =====
-col7 = st.columns(1)
-
-with col4:
-    st.markdown(kpi_card(indicadores[6]), unsafe_allow_html=True)
+    for col, indicador in zip(cols, linha):
+        with col:
+            st.markdown(kpi_card(indicador), unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)

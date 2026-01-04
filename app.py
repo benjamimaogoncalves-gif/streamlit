@@ -101,7 +101,7 @@ strong {
 
 /* Tipografia local */
 .card h2 {
-  margin-bottom: 8px;
+  font-weight: 400;   /* normal / light visual */
 }
 
 .card p {
@@ -114,7 +114,7 @@ strong {
 
 .kpi-value {
   font-size: 32px;
-  font-weight: 600;
+  font-weight: 700;   /* bold real */
   color: var(--accent);
 }
 

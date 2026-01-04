@@ -63,7 +63,7 @@ st.markdown("""
   --text-secondary: var(--gray-500);
   --text-inverse: var(--color-white);
 
-  --bg-page: var(--gray-100);
+  --bg-page: var(--color-black);
   --bg-card: var(--color-white);
 
   --accent: var(--color-primary);
@@ -109,7 +109,7 @@ body {
    ======================= */
 h1 {
   font-size: 32px;
-  margin-bottom: 32px;
+  margin-bottom: 80px;
 }
 
 h2 {
@@ -126,7 +126,7 @@ p {
 }
 
 .kpi-value {
-  font-size: 32px;
+  font-size: 50px;
   font-weight: 700;
   color: var(--accent);
 }

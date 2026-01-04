@@ -21,7 +21,7 @@ def load_indicadores():
         {"id": "D", "titulo": "Indicador D", "valor": 63, "delta": "+5 mês anterior", "variant": "dark"},
         {"id": "E", "titulo": "Indicador E", "valor": 28, "delta": "+1 mês anterior", "variant": "default"},
         {"id": "F", "titulo": "Indicador F", "valor": 51, "delta": "estável", "variant": "default"},
-        {"id": "G", "titulo": "Indicador G", "valor": "Total", "delta": "atenção: valor abaixo da projeção", "variant": "dark"},
+        {"id": "G", "titulo": "Indicador G", "valor": "Total", "delta": "atenção: valor abaixo da projeção", "variant": "dark", "span": "full"},
     ]
 
 # =========================================================
@@ -171,8 +171,15 @@ num_colunas = 3  # controle do grid
 
 for i in range(0, len(indicadores), num_colunas):
     linha = indicadores[i:i + num_colunas]
-    cols = st.columns(num_colunas)
 
+    # Caso: um único card full-width
+    if len(linha) == 1 and linha[0].get("span") == "full":
+        col = st.columns(1)[0]
+        with col:
+            st.markdown(kpi_card(linha[0]), unsafe_allow_html=True)
+        continue
+
+    cols = st.columns(num_colunas)
     for col, indicador in zip(cols, linha):
         with col:
             st.markdown(kpi_card(indicador), unsafe_allow_html=True)

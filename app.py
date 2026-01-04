@@ -3,7 +3,7 @@ import pandas as pd
 import altair as alt
 
 # =========================================================
-# 0. DESIGN TOKENS (fonte única de verdade)
+# 0. DESIGN TOKENS
 # =========================================================
 
 color_black = "#000000"
@@ -50,14 +50,10 @@ def load_indicadores():
 # =========================================================
 
 def get_indicadores():
-    """
-    Camada intermediária.
-    Aqui entram regras de negócio no futuro.
-    """
     return load_indicadores()
 
 # =========================================================
-# 4. STYLE – DESIGN SYSTEM
+# 4. STYLE
 # =========================================================
 
 st.markdown(f"""
@@ -66,7 +62,6 @@ st.markdown(f"""
   --color-black: {color_black};
   --color-white: {color_white};
   --accent: {color_accent};
-
   --gray-300: {gray_300};
   --gray-500: {gray_500};
 }}
@@ -97,14 +92,6 @@ body {{
 .card-dark h2,
 .card-dark p {{
   color: var(--color-white);
-}}
-
-.chart-wrapper {{
-  background: var(--color-black);
-  border-radius: 16px;
-  padding: 16px;
-  margin-top: 16px;
-  border: 1px solid var(--gray-300);
 }}
 
 h1 {{
@@ -154,7 +141,7 @@ def kpi_card(indicador):
     </div>
     """
 
-def line_chart_white(series):
+def line_chart_black(series):
     df = pd.DataFrame({
         "x": list(range(len(series))),
         "y": series
@@ -165,8 +152,8 @@ def line_chart_white(series):
             "x:O",
             title=None,
             axis=alt.Axis(
-                labelColor=color_white,
-                tickColor=color_white,
+                labelColor=color_black,
+                tickColor=color_black,
                 labelAngle=0
             )
         ),
@@ -174,19 +161,23 @@ def line_chart_white(series):
             "y:Q",
             title=None,
             axis=alt.Axis(
-                labelColor=color_white,
-                tickColor=color_white
+                labels=False,
+                ticks=False
             )
         )
     )
 
-    line = base.mark_line(color=color_white, strokeWidth=2)
-    points = base.mark_point(color=color_white, filled=True, size=60)
-    labels = base.mark_text(dy=-10, color=color_white, fontSize=12).encode(text="y:Q")
+    line = base.mark_line(color=color_black, strokeWidth=2)
+    points = base.mark_point(color=color_black, filled=True, size=60)
+    labels = base.mark_text(
+        dy=-10,
+        color=color_black,
+        fontSize=12
+    ).encode(text="y:Q")
 
     return (line + points + labels).properties(
         height=160,
-        background=color_black
+        background=color_white
     ).configure_view(
         strokeWidth=0
     ).configure_axis(
@@ -212,7 +203,6 @@ for i in range(0, len(indicadores), num_colunas):
         col = st.columns(1)[0]
 
         with col:
-            # abre card
             st.markdown(
                 f"""
                 <div class="card card-dark">
@@ -223,15 +213,11 @@ for i in range(0, len(indicadores), num_colunas):
                 unsafe_allow_html=True
             )
 
-            # gráfico com fundo arredondado e margem
-            st.markdown('<div class="chart-wrapper">', unsafe_allow_html=True)
             st.altair_chart(
-                line_chart_white(indicador["series"]),
+                line_chart_black(indicador["series"]),
                 use_container_width=True
             )
-            st.markdown('</div>', unsafe_allow_html=True)
 
-            # fecha card
             st.markdown("</div>", unsafe_allow_html=True)
 
         continue

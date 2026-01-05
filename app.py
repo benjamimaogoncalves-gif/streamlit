@@ -34,12 +34,13 @@ def load_indicadores():
         {"id": "F", "titulo": "Indicador F", "valor": 51, "delta": "estável", "variant": "default"},
         {
             "id": "G",
-            "titulo": "Indicador G",
-            "valor": "Total",
-            "delta": "atenção: valor abaixo da projeção",
+            "titulo": "Resumo Executivo",
             "variant": "dark",
             "span": "full",
-        },
+            "status": "alerta",
+            "headline": "Resultado abaixo do esperado",
+            "message": "Apesar do crescimento no volume, a rentabilidade ficou abaixo da projeção.",
+        }
     ]
 
 # =========================================================
@@ -122,6 +123,38 @@ p {{
 .card-dark .kpi-value {{
   color: var(--color-white);
 }}
+
+.status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.status-info {
+  background: #e6f0ff;
+  color: #003a8c;
+}
+
+.status-alerta {
+  background: #fff4e5;
+  color: #8a4b00;
+}
+
+.status-critico {
+  background: #ffe5e5;
+  color: #8c0000;
+}
+
+.card-dark .status-info,
+.card-dark .status-alerta,
+.card-dark .status-critico {
+  background: rgba(255,255,255,0.1);
+  color: #ffffff;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -142,6 +175,18 @@ def kpi_card(indicador):
     </div>
     """
 
+def narrative_card(indicador):
+    status_class = f"status status-{indicador['status']}"
+
+    return f"""
+    <div class="card card-dark">
+      <span class="{status_class}">{indicador['status'].upper()}</span>
+      <h2>{indicador['titulo']}</h2>
+      <p><strong>{indicador['headline']}</strong></p>
+      <p>{indicador['message']}</p>
+    </div>
+    """
+
 # =========================================================
 # 6. LAYOUT – GRID DINÂMICO (COM SPAN)
 # =========================================================
@@ -157,11 +202,18 @@ for i in range(0, len(indicadores), num_colunas):
 
     # Caso full-width (Indicador G)
     if len(linha) == 1 and linha[0].get("span") == "full":
+        indicador = linha[0]
         col = st.columns(1)[0]
+
         with col:
-            st.markdown(kpi_card(linha[0]), unsafe_allow_html=True)
+            if "headline" in indicador:
+                st.markdown(narrative_card(indicador), unsafe_allow_html=True)
+            else:
+                st.markdown(kpi_card(indicador), unsafe_allow_html=True)
+
         continue
 
+    # Grid normal
     cols = st.columns(num_colunas)
     for col, indicador in zip(cols, linha):
         with col:

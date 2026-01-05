@@ -124,42 +124,41 @@ p {{
   color: var(--color-white);
 }}
 
-.status {
+.status {{
   display: inline-block;
   padding: 4px 12px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
   margin-bottom: 12px;
-}
+}}
 
-.status-info {
+.status-info {{
   background: #e6f0ff;
   color: #003a8c;
-}
+}}
 
-.status-alerta {
+.status-alerta {{
   background: #fff4e5;
   color: #8a4b00;
-}
+}}
 
-.status-critico {
+.status-critico {{
   background: #ffe5e5;
   color: #8c0000;
-}
+}}
 
 .card-dark .status-info,
 .card-dark .status-alerta,
-.card-dark .status-critico {
+.card-dark .status-critico {{
   background: rgba(255,255,255,0.1);
   color: #ffffff;
-}
-
+}}
 </style>
 """, unsafe_allow_html=True)
 
 # =========================================================
-# 5. COMPONENTE
+# 5. COMPONENTES
 # =========================================================
 
 def kpi_card(indicador):
@@ -200,20 +199,17 @@ st.title("Calculadora de Rentabilidade")
 for i in range(0, len(indicadores), num_colunas):
     linha = indicadores[i:i + num_colunas]
 
-    # Caso full-width (Indicador G)
+    # Caso full-width (card narrativo)
     if len(linha) == 1 and linha[0].get("span") == "full":
         indicador = linha[0]
         col = st.columns(1)[0]
 
         with col:
-            if "headline" in indicador:
-                st.markdown(narrative_card(indicador), unsafe_allow_html=True)
-            else:
-                st.markdown(kpi_card(indicador), unsafe_allow_html=True)
+            st.markdown(narrative_card(indicador), unsafe_allow_html=True)
 
         continue
 
-    # Grid normal
+    # Grid normal (KPIs)
     cols = st.columns(num_colunas)
     for col, indicador in zip(cols, linha):
         with col:

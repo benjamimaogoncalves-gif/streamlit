@@ -31,8 +31,7 @@ st.set_page_config(
     initial_sidebar_state="auto",
     image = itau_logo_completo_laranja,
     menu_items (
-        "Get help": 'itau_home',
-        "Report a Bug": "The URL this menu item should point to.",
+        "Report a Bug": itau_home,
         "About": "# This is a header. This is an *extremely* cool app!"
     )
 )

@@ -26,7 +26,7 @@ itau_logo_laranja = st.image(Path="https://upload.wikimedia.org/wikipedia/common
 itau_home = "https://www.itau.com.br/"
 
 st.set_page_config(
-    page_title="Calculadora de Rentabilidade"
+    page_title="Calculadora de Rentabilidade",
     layout="wide",
     initial_sidebar_state="auto",
     image = itau_logo_completo_laranja,

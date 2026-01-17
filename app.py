@@ -29,8 +29,5 @@ st.set_page_config(
     page_title="Calculadora de Rentabilidade",
     layout="wide",
     initial_sidebar_state="auto",
-    image = itau_logo_completo_laranja,
-    menu_items (
-        "About": "# This is a header. This is an *extremely* cool app!"
-    )
+    image = itau_logo_completo_laranja
 )

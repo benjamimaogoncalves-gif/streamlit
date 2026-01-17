@@ -22,10 +22,17 @@ gray_500 = "#757575"
 # ajustar a configuração padrão da página | configure the default settings of the page
 
 st.image(Path, or list of these)
+itau_logo_completo_laranja = st.image(Path="https://i0.wp.com/assets.b9.com.br/wp-content/uploads/2023/12/itau-nova-marca.png?fit=1920%2C1080&ssl=1")
+itau_logo_laranja = st.image(Path="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Ita%C3%BA_Unibanco_logo_2023.svg/500px-Ita%C3%BA_Unibanco_logo_2023.svg.png")
 
 st.set_page_config(
     page_title="Calculadora de Rentabilidade"
     layout="wide",
     initial_sidebar_state="auto",
-    
+    image = itau_logo_completo_laranja,
+    menu_items (
+        "Get help": "The URL this menu item should point to."
+        "Report a Bug": "The URL this menu item should point to."
+        "About": "A markdown string to show in the About dialog."
+    )
 )

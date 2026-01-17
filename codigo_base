@@ -1,0 +1,31 @@
+# =========================================================
+# 0. BIBLIOTECAS | LIBRARIES
+# =========================================================
+
+import streamlit as st
+import pandas as pd
+
+# =========================================================
+# 1. DESIGN
+# =========================================================
+
+# 1.A. SISTEMA DE CORES | COLOR SYSTEM
+# configurar as cores padrão escolhidas | configure the default colors chosen
+
+color_black = "#000000"
+color_white = "#ffffff"
+color_accent = "#ff6200"
+gray_300 = "#bdbdbd"
+gray_500 = "#757575"
+
+# 1.B. LAYOUT
+# ajustar a configuração padrão da página | configure the default settings of the page
+
+st.image(Path, or list of these)
+
+st.set_page_config(
+    page_title="Calculadora de Rentabilidade"
+    layout="wide",
+    initial_sidebar_state="auto",
+    
+)

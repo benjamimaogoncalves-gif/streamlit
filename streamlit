@@ -1,1 +1,202 @@
+import sklearn as sk
+import random
+import pandas as pd
+import numpy as np
+import joblib
+import json
+import os
+import streamlit as st
+import streamlit_extras
+
+from pathlib import path
+from datetime import date
+
+# ----------------------------------------------------------
+# 0. CONFIGURAÇÃO DAS CLASSES E APLICAÇÃO DA PREVISÃO
+# ----------------------------------------------------------
+
+def cria_tabela_resultado():
+    Previsao_01 = ["Cartão", "default", "Produto", 0.1]
+    Previsao_02 = ["53%", "default", "CC/PB", 0.1]
+    Previsao_03 = ["18%", "dark", "RAROC", 0.1]
+    data = np.array([Previsao_01, Previsao_02, Previsao_03])
+  
+    columns = ['valor', 'config_interface', 'titulo', 'delta']
+    index = ['Previsao_01', 'Previsao_02', 'Previsao_03']
+    
+    tabela_resultados = pd.DataFrame(data, columns = columns, index = index)
+    return tabela_resultados
+
+def blocos_principais():
+    Previsao_01 = ["PRODUTO", "default", "PARTE 01", "escolha o produto"]
+    Previsao_02 = ["INPUTS", "default", "PARTE 02", "insira sua simulação"]
+    Previsao_03 = ["RESULTADOS", "dark", "PARTE 03", "valores calculados"]
+    data = np.array([Previsao_01, Previsao_02, Previsao_03])
+  
+    columns = ['valor', 'config_interface', 'titulo', 'delta']
+    index = ['Previsao_01', 'Previsao_02', 'Previsao_03']
+    
+    tabela_resultados = pd.DataFrame(data, columns = columns, index = index)
+    return tabela_resultados
+
+def cria_planilha_modelo():
+    data = np.array([
+        [1.0, 1.0, "S", 1000, 100, 0.5, 0.5, 100, 0.5, "CARTAO", 200, 5000, "BAIXA_RENDA", "A_B", 1.0, "202508"]
+        [1.0, 1.0, "S", 1000, 100, 0.5, 0.5, 100, 0.5, "CARTAO", 200, 5000, "BAIXA_RENDA", "A_B", 1.0, "202508"]
+        [1.0, 1.0, "S", 1000, 100, 0.5, 0.5, 100, 0.5, "CARTAO", 200, 5000, "BAIXA_RENDA", "A_B", 1.0, "202508"]])
+  
+    columns = ['IU_4', 'PPF4', 'ABERTURA', 'TICKET',
+        'FAT_4_UNIT', 'IU_4_UNIT', 'OVER4_FIS','FAT_4_LIMITE',
+        'ATIVACAO_4', 'PRODUTO', 'CONTRATOS', 'LIMITE',
+        'SEGMENTO', 'RATING', 'OVER4_FIN', 'SAFRA']
+    index = ['Simulacao_01', 'Simulacao_02', 'Simulacao_03']
+    
+    input_data = pd.DataFrame(data, columns = columns, index = index)
+    return input_data
+
+# ----------------------------------------------------------
+# 1. DESIGN TOKENS
+# ----------------------------------------------------------
+
+color_black = "#000000"
+color_white = "#ffffff"
+color_accent = "#ff6200"
+gray_300 = "#bdbdbd"
+gray_500 = "#757575"
+
+
+# ----------------------------------------------------------
+# 2. CONFIGURAÇÃO DO LAYOUT
+# ----------------------------------------------------------
+
+st.set_page_config(page_title="Calculadora de Rentabilidade", layout="wide", initial_sidebar_state="auto")
+
+# ----------------------------------------------------------
+# 3. STYLE
+# ----------------------------------------------------------
+
+[...]
+
+.card-fade {{
+    background: var(--color-white);
+    border-color: var(--gray-500);
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid var(--gray-300);
+    margin-bottom: 16px;
+}}
+
+.card-fade h2,
+.card-fade p {{
+    color: var(--gray-300);
+}}
+
+[...]
+
+.card-fade .kpi-value {{
+    color: var(--gray-300);
+}}
+
+.card-fade .h2 {{
+    color: var(--gray-300);
+}}
+
+.card-fade .p {{
+    color: var(--gray-300);
+}}
+
+[...]
+
+
+# ----------------------------------------------------------
+# 0. COMPONENTES
+# ----------------------------------------------------------
+
+def kpi_card(tabela_resultados, default):
+    if default == "dark":
+        classes = "card-dark"
+    elif default == "fade":
+        classes = "card-fade"
+    else:
+        classes = "card"
+    return f"""
+    <div class = "{classes}'>
+        <h2>{tabela_resultados["titulo"]}</h2>
+        <div class="kpi-value"> {tabela_resultados["valor"]}</div>
+        <p>{tabela_resultados["delta"]}</p>
+    </div>
+    """
+
+def drop_arquivo(drop_titulo, default):
+    if default == "dark":
+        classes = "card-dark"
+    elif default == "fade":
+        classes = "card-fade"
+    else:
+        classes = "card"
+    uploaded_files = st.file_uploader(
+        "Subir Arquivo", accept_multiple_files=True, type="csv"
+    )
+    for uploaded_file in uploaded_files:
+        df = pd.read_csv(uploaded_file)
+        st.write(df)
+    return f"""
+    <div class = "{classes}'>
+        <h2>{tabela_resultados["titulo"]}</h2>
+        <div class="kpi-value"> {tabela_resultados["valor"]}</div>
+        <p>{tabela_resultados["delta"]}</p>
+    </div>
+    """
+
+# ----------------------------------------------------------
+# 0. LAYOUT
+# ----------------------------------------------------------
+
+num_colunas = 3
+tabela_resultados = cria_tabela_resultados()
+blocos_principais = blocos_principais()
+modelo = cria_planilha_modelo()
+modelo_planilha = modelo.to_csv(index=False).encode("utf-8")
+proxima_etapa = 0
+button_id = 0
+
+st.markdown('<div class = "container">', unsafe_allow_html=True)
+
+st.title("Calculadora de Rentabilidade")
+
+if st.button("Iniciar") and proxima_etapa == 0:
+    col1, col2, col3 = st.columns(num_colunas)
+    with col1:
+        with st.form("Formulario"):
+            st.write("Escolha o(s) produto(s)")
+            produto = st.selectbox('Produtos', ['Cartão Correntista', 'Cartão Não Correntista'', 'Limite da Conta'])
+            if st.form_submit_button('Avançar'):
+                proxima_etapa = True
+    with col2:
+        drop_arquivo("Suba seu arquivo", "default")
+    with col3:
+        st.markdown(kpi_card(blocos_principais.iloc[2], "fade"), unsafe_allow_html = True)
+
+else:
+    col1, col2, col3 = st.columns(num_colunas)
+    with col1:
+        st.markdown(kpi_card(blocos_principais.iloc[0], "fade"), unsafe_allow_html = True)
+    with col2:
+        st.markdown(kpi_card(blocos_principais.iloc[1], "fade"), unsafe_allow_html = True)
+    with col3:
+        st.markdown(kpi_card(blocos_principais.iloc[2], "fade"), unsafe_allow_html = True)
+
+col4, col5, col6 = st.columns(num_colunas)
+with col4:
+    if st_button("Baixe aqui nosso modelo de planilha"):
+        st.download_button(
+            label="Modelo Planilha",
+            data=modelo_planilha,
+            file_name="modelo_planilha.txt",
+            on_click="rerun",
+            type="primary",
+            icon=":material/download:",
+            width="stretch"
+            )
+    
 

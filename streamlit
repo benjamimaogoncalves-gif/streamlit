@@ -75,7 +75,44 @@ st.set_page_config(page_title="Calculadora de Rentabilidade", layout="wide", ini
 # 3. STYLE
 # ----------------------------------------------------------
 
-[...]
+
+st.markdown(f"""
+<style>
+:root {{
+  --color-black: {color_black};
+  --color-white: {color_white};
+  --accent: {color_accent};
+  --gray-300: {gray_300};
+  --gray-500: {gray_500};
+}}
+
+body {{
+  background: var(--color-black);
+}}
+
+.container {{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px;
+}}
+
+.card {{
+  background: var(--color-white);
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid var(--gray-300);
+  margin-bottom: 16px;
+}}
+
+.card-dark {{
+  background: var(--color-black);
+  border-color: var(--color-black);
+}}
+
+.card-dark h2,
+.card-dark p {{
+  color: var(--color-white);
+}}
 
 .card-fade {{
     background: var(--color-white);
@@ -91,7 +128,33 @@ st.set_page_config(page_title="Calculadora de Rentabilidade", layout="wide", ini
     color: var(--gray-300);
 }}
 
-[...]
+h1 {{
+  font-size: 32px;
+  margin-bottom: 80px;
+}}
+
+h2 {{
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+}}
+
+p {{
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--gray-500);
+}}
+
+.kpi-value {{
+  font-size: 50px;
+  font-weight: 700;
+  color: var(--accent);
+}}
+
+.card-dark .kpi-value {{
+  color: var(--color-white);
+}}
 
 .card-fade .kpi-value {{
     color: var(--gray-300);
@@ -105,8 +168,38 @@ st.set_page_config(page_title="Calculadora de Rentabilidade", layout="wide", ini
     color: var(--gray-300);
 }}
 
-[...]
+.status {{
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}}
 
+.status-info {{
+  background: #e6f0ff;
+  color: #003a8c;
+}}
+
+.status-alerta {{
+  background: #fff4e5;
+  color: #8a4b00;
+}}
+
+.status-critico {{
+  background: #ffe5e5;
+  color: #8c0000;
+}}
+
+.card-dark .status-info,
+.card-dark .status-alerta,
+.card-dark .status-critico {{
+  background: rgba(255,255,255,0.1);
+  color: #ffffff;
+}}
+</style>
+""", unsafe_allow_html=True)
 
 # ----------------------------------------------------------
 # 0. COMPONENTES
@@ -150,15 +243,21 @@ def drop_arquivo(drop_titulo, default):
 
 # ----------------------------------------------------------
 # 0. LAYOUT
-# ----------------------------------------------------------
+# ---------------------------------------------------------
 
-num_colunas = 3
-tabela_resultados = cria_tabela_resultados()
-blocos_principais = blocos_principais()
-modelo = cria_planilha_modelo()
-modelo_planilha = modelo.to_csv(index=False).encode("utf-8")
-proxima_etapa = 0
-button_id = 0
+def Contador_de_colunas(colunas):
+    indicadores_a = get_indicadores(colunas)
+
+def Pacote_atualizados()
+    tabela_resultados = cria_tabela_resultados()
+    blocos_principais = blocos_principais()
+    modelo = cria_planilha_modelo()
+    modelo_planilha = modelo.to_csv(index=False).encode("utf-8")
+    proxima_etapa = 0
+    button_id = 0
+
+Contador_de_colunas(3)
+Pacote_atualizados()
 
 st.markdown('<div class = "container">', unsafe_allow_html=True)
 
@@ -198,5 +297,3 @@ with col4:
             icon=":material/download:",
             width="stretch"
             )
-    
-
